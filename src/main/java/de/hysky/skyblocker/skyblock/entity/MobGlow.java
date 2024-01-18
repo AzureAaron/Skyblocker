@@ -11,11 +11,18 @@ import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.passive.BatEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
 
+//TODO optimize this to not calculate the string of the name twice per frame
 public class MobGlow {
+	private static final int ORANGE = 0xf57738;
+	private static final int YELLOW = 0xfee15c;
+	private static final int PURPLE = 0x5b2cb2;
+	private static final int BLUE = 0x57c2f7;
+	
 	public static boolean shouldMobGlow(Entity entity) {
 		Box box = entity.getBoundingBox();
 
@@ -68,16 +75,37 @@ public class MobGlow {
 
 		if (entity instanceof PlayerEntity) {
 			return switch (name) {
-				case "Lost Adventurer" -> 0xfee15c;
-				case "Shadow Assassin" -> 0x5b2cb2;
-				case "Diamond Guy" -> 0x57c2f7;
+				case "Lost Adventurer" -> YELLOW;
+				case "Shadow Assassin" -> PURPLE;
+				case "Diamond Guy" -> BLUE;
 				case "Arcade Livid", "Crossed Livid", "Doctor Livid", "Frog Livid", "Hockey Livid",
 				"Purple Livid", "Scream Livid", "Smile Livid", "Vendetta Livid" -> LividColor.getGlowColor(name);
 				case "Blobbercyst " -> Formatting.GREEN.getColorValue();
-				default -> 0xf57738;
+				default -> ORANGE;
 			};
 		}
 
-		return 0xf57738;
+		return ORANGE;
+	}
+
+	/**
+	 * This returns a string to avoid having to calculate the text's string value multiple times
+	 */
+	public static String shouldMobNameTagGlow(Text text) {
+		if (Utils.isInDungeons()) {
+			String name = text.getString();
+
+			if (name.contains("✯") && SkyblockerConfigManager.get().locations.dungeons.starredMobGlow) return name;
+		}
+
+		return null;
+	}
+
+	public static int getMobNameTagGlowColor(String name) {
+		if (name.contains("Lost Adventurer") || name.contains("Frozen Adventurer")) return YELLOW;
+		if (name.contains("Shadow Assassin")) return PURPLE;
+		if (name.contains("Angry Archaeologist")) return BLUE;
+
+		return ORANGE;
 	}
 }

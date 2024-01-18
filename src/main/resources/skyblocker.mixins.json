@@ -13,6 +13,7 @@
     "DrawContextMixin",
     "DyeableItemMixin",
     "EntityRenderDispatcherMixin",
+    "EntityRendererMixin",
     "FarmlandBlockMixin",
     "GenericContainerScreenHandlerMixin",
     "HandledScreenMixin",
