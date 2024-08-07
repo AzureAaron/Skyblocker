@@ -13,10 +13,11 @@ import de.hysky.skyblocker.utils.render.RenderHelper;
 import de.hysky.skyblocker.utils.ws.Type;
 import net.minecraft.util.math.BlockPos;
 
-public record CrystalsWaypointMessage(CrystalHollowsLocationsCategory location, BlockPos coordinates) implements Message<CrystalsWaypointMessage> {
+public record CrystalsWaypointMessage(CrystalHollowsLocationsCategory location, BlockPos coordinates, Optional<Long> timestamp) implements Message<CrystalsWaypointMessage> {
 	private static final Codec<CrystalsWaypointMessage> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			CrystalHollowsLocationsCategory.CODEC.fieldOf("name").forGetter(CrystalsWaypointMessage::location),
-			BlockPos.CODEC.fieldOf("coordinates").forGetter(CrystalsWaypointMessage::coordinates))
+			BlockPos.CODEC.fieldOf("coordinates").forGetter(CrystalsWaypointMessage::coordinates),
+			Codec.LONG.optionalFieldOf("timestamp").forGetter(CrystalsWaypointMessage::timestamp))
 			.apply(instance, CrystalsWaypointMessage::new));
 	private static final Codec<List<CrystalsWaypointMessage>> LIST_CODEC = CODEC.listOf();
 

@@ -393,7 +393,7 @@ public class CrystalsLocationsManager {
 
     private static void trySendWaypoint2Socket(MiningLocationLabel.CrystalHollowsLocationsCategory category) {
         if (!waypointsSent2Socket.contains(category)) {
-            WsMessageHandler.sendMessage(Service.CRYSTAL_WAYPOINTS, new CrystalsWaypointMessage(category, CLIENT.player.getBlockPos()));
+            WsMessageHandler.sendMessage(Service.CRYSTAL_WAYPOINTS, new CrystalsWaypointMessage(category, CLIENT.player.getBlockPos(), Optional.of(CLIENT.world.getTimeOfDay())));
             waypointsSent2Socket.add(category);
         }
     }
